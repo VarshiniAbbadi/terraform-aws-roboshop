@@ -8,7 +8,7 @@ resource "aws_lb_target_group" "main" {
     healthy_threshold = 2
     interval = 5
     matcher = "200-299"
-    path = "/health"
+    path = local.health_check_path
     port = local.tg_port
     timeout = 2
     unhealthy_threshold = 3
