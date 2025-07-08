@@ -1,6 +1,6 @@
 resource "aws_lb_target_group" "main" {
   name     = "${var.project}-${var.environment}-${var.component}" #roboshop-dev-catalogue
-  port     = 8080
+  port     = local.tg_port
   protocol = "HTTP"
   vpc_id   = local.vpc_id
   deregistration_delay = 120
@@ -9,7 +9,7 @@ resource "aws_lb_target_group" "main" {
     interval = 5
     matcher = "200-299"
     path = "/health"
-    port = 8080
+    port = local.tg_port
     timeout = 2
     unhealthy_threshold = 3
   }
