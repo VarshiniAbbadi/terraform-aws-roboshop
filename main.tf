@@ -91,7 +91,7 @@ resource "terraform_data" "main_delete" {
 # }
 
 provisioner "local-exec" {
-  interpreter = ["PowerShell", "-Command"]
+  interpreter = ["PowerShell", "-C"]
   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   # environment = {
   #   AWS_REGION  = "us-east-1"
