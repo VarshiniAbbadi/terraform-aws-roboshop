@@ -91,11 +91,12 @@ resource "terraform_data" "main_delete" {
 # }
 
 provisioner "local-exec" {
+  interpreter = ["PowerShell", "-Command"]
   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-  environment = {
-    AWS_REGION  = "us-east-1"
-    AWS_PROFILE = "default"
-  }
+  # environment = {
+  #   AWS_REGION  = "us-east-1"
+  #   AWS_PROFILE = "default"
+  # }
 }
   depends_on = [aws_ami_from_instance.main]
 }
