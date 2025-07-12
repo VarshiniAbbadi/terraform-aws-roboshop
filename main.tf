@@ -86,10 +86,17 @@ resource "terraform_data" "main_delete" {
   #   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   # }
 
-  provisioner "local-exec" {
-  command = "set AWS_REGION=us-east-1 && set AWS_PROFILE=default && aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-}
+#   provisioner "local-exec" {
+#   command = "set AWS_REGION=us-east-1 && set AWS_PROFILE=default && aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+# }
 
+provisioner "local-exec" {
+  command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+  environment = {
+    AWS_REGION  = "us-east-1"
+    AWS_PROFILE = "default"
+  }
+}
   depends_on = [aws_ami_from_instance.main]
 }
 
