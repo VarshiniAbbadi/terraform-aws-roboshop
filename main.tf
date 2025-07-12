@@ -48,8 +48,11 @@ resource "terraform_data" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/${var.component}.sh",
-      "sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
+      "sudo yum install nginx -y",
+      "sudo systemctl enable nginx", 
+      "sudo systemctl start nginx",
+      #"chmod +x /tmp/${var.component}.sh",
+      #"sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
     ]
   }
 }
@@ -79,8 +82,8 @@ resource "terraform_data" "main_delete" {
   
   # make sure you have aws configure in your laptop
   provisioner "local-exec" {
-      command = "AWS_REGION=us-east-1 AWS_PROFILE=default aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-    # command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+    # command = "AWS_REGION=us-east-1 AWS_PROFILE=default aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+    command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   }
 
   depends_on = [aws_ami_from_instance.main]
