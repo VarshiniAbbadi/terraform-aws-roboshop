@@ -81,10 +81,14 @@ resource "terraform_data" "main_delete" {
   ]
   
   # make sure you have aws configure in your laptop
+  # provisioner "local-exec" {
+  #   interpreter = ["PowerShell", "-Command"]
+  #   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+  # }
   provisioner "local-exec" {
-    interpreter = ["PowerShell", "-Command"]
-    command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-  }
+  interpreter = ["PowerShell", "-Command"]
+  command     = "Set-Item -Path Env:AWS_REGION -Value 'us-east-1'; Set-Item -Path Env:AWS_PROFILE -Value 'default'; aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
+}
 
   depends_on = [aws_ami_from_instance.main]
 }
