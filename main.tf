@@ -48,11 +48,11 @@ resource "terraform_data" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo yum install nginx -y",
-      "sudo systemctl enable nginx", 
-      "sudo systemctl start nginx",
-      #"chmod +x /tmp/${var.component}.sh",
-      #"sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
+      # "sudo yum install nginx -y",
+      # "sudo systemctl enable nginx", 
+      # "sudo systemctl start nginx",
+      "chmod +x /tmp/${var.component}.sh",
+      "sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
     ]
   }
 }
