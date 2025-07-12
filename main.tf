@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "main" {
-  name     = "${var.project}-${var.environment}-${var.component}" #roboshop-dev-catalogue
+  name     = "${var.project}-${var.environment}-${var.component}" #roboshop-dev-${var.component}
   port     = local.tg_port
   protocol = "HTTP"
   vpc_id   = local.vpc_id
@@ -20,7 +20,7 @@ resource "aws_instance" "main" {
   instance_type = "t3.micro"
   vpc_security_group_ids = [local.sg_id]
   subnet_id = local.private_subnet_id
-  # iam_instance_profile = "EC2RoleToFetchSSMParams"
+  #iam_instance_profile = "EC2RoleToFetchSSMParams"
   tags = merge(
     local.common_tags,
     {
@@ -48,9 +48,6 @@ resource "terraform_data" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      # "sudo yum install nginx -y",
-      # "sudo systemctl enable nginx", 
-      # "sudo systemctl start nginx",
       "chmod +x /tmp/${var.component}.sh",
       "sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
     ]
@@ -81,23 +78,10 @@ resource "terraform_data" "main_delete" {
   ]
   
   # make sure you have aws configure in your laptop
-  # provisioner "local-exec" {
-  #   interpreter = ["PowerShell", "-Command"]
-  #   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-  # }
-
-#   provisioner "local-exec" {
-#   command = "set AWS_REGION=us-east-1 && set AWS_PROFILE=default && aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-# }
-
-provisioner "local-exec" {
+  provisioner "local-exec" {
     command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
-    interpreter = ["PowerShell", "-C"]
-  # environment = {
-  #   AWS_REGION  = "us-east-1"
-  #   AWS_PROFILE = "default"
-  # }
-}
+  }
+
   depends_on = [aws_ami_from_instance.main]
 }
 
