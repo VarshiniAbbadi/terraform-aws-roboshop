@@ -82,7 +82,6 @@ resource "terraform_data" "main_delete" {
   
   # make sure you have aws configure in your laptop
   provisioner "local-exec" {
-    # command = "AWS_REGION=us-east-1 AWS_PROFILE=default aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
     command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
   }
 
